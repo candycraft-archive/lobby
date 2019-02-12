@@ -2,7 +2,6 @@ package de.godtitan.lobby.command;
 
 import de.godtitan.lobby.Lobby;
 import de.godtitan.lobby.Messages;
-import de.godtitan.lobby.listener.JumpAndRunListener;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -37,11 +36,6 @@ public class BuildCommand implements CommandExecutor {
 
         if (player.hasPermission("lobby.build")) {
 
-            if (JumpAndRunListener.getInstance().getJumpAndRuns().containsKey(player.getName())) {
-                player.sendMessage(Messages.PREFIX + "§7Bitte §cverlasse §7zuerst das Jump and Run!");
-                return true;
-            }
-
             if (args.length < 1) {
                 if (building.contains(player.getName())) {
                     building.remove(player.getName());
@@ -72,10 +66,6 @@ public class BuildCommand implements CommandExecutor {
 
                 Player buildingPlayer = Bukkit.getPlayer(args[0]);
                 if (buildingPlayer != null) {
-                    if (JumpAndRunListener.getInstance().getJumpAndRuns().containsKey(buildingPlayer.getName())) {
-                        player.sendMessage(Messages.PREFIX + "§e" + buildingPlayer.getName() + "§7 befindet sich in einem §cJump and Run§7!");
-                        return true;
-                    }
 
                     if (building.contains(buildingPlayer.getName())) {
                         building.remove(buildingPlayer.getName());

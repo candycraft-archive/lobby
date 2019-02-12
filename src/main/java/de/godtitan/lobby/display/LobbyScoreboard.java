@@ -15,21 +15,23 @@ public class LobbyScoreboard extends NovusScoreboard {
 
     public LobbyScoreboard(Player player) {
         super(player, player.getName(), "§d§lCandyCraft");
+        this.descending = false;
     }
 
     @Override
     public void show() {
-        new NovusScore("§cServer:");
-        new NovusScore("§f " + TimoCloudAPI.getBukkitAPI().getThisServer().getName());
-        new NovusScore();
-        new NovusScore("§cRang:");
-        this.rank = new NovusScore("§f Lädt...");
-        new NovusScore();
-        new NovusScore("§cTeamSpeak:");
-        new NovusScore("§f frag moritz");
-        new NovusScore();
-        new NovusScore("§cCoins:");
+
         this.coins = new NovusScore("§f§f Lädt...");
+        new NovusScore("§cCoins:");
+        new NovusScore();
+        new NovusScore("§f frag moritz");
+        new NovusScore("§cTeamSpeak:");
+        new NovusScore();
+        this.rank = new NovusScore("§f Lädt...");
+        new NovusScore("§cRang:");
+        new NovusScore();
+        new NovusScore("§f " + TimoCloudAPI.getBukkitAPI().getThisServer().getName().replace('-', ' '));
+        new NovusScore("§cServer:");
 
         super.show();
     }

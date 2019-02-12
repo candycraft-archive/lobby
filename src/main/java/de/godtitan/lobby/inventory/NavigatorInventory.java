@@ -27,20 +27,12 @@ public class NavigatorInventory implements Listener {
 
     private static final String TITLE = "§cNavigator";
     private static final Map<Inventory, Integer> ANIMATION_STEPS = new HashMap<>();
-    private static final List<String> COMING_SOON_LORE = Arrays.asList(" ", "§8➥ §c§oComing soon...", " ");
     private static final List<String> TELEPORT_LORE = Arrays.asList(" ", "§8× §cLädt...", "§8➥ §6§oLinksklick zum Teleportieren", " ");
-    private static final List<String> JUMP_AND_RUN_LORE = Arrays.asList(" ", "§8➥ §6§oLinksklick für mehr Auswahl", " ");
-    private static final ItemStack BEDWARS = new ItemBuilder(Material.BED).setDisplayName("§8» §eBedWars").setLore(COMING_SOON_LORE).build();
-    private static final ItemStack BLACK_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 15).setDisplayName(" ").build();
-    private static final ItemStack BUILD_FFA = new ItemBuilder(Material.RED_SANDSTONE).setDisplayName("§8» §eBuildFFA").setLore(TELEPORT_LORE).build();
-    private static final ItemStack GUIRO = new ItemBuilder(Material.EMERALD).setDisplayName("§8» §2Guiro §8(1.13.2)").setLore(COMING_SOON_LORE).build();
-    private static final ItemStack JUMP_AND_RUNS = new ItemBuilder(Material.DIAMOND_BOOTS).setDisplayName("§8» §eJump and Runs").setLore(JUMP_AND_RUN_LORE).build();
-    private static final ItemStack ONE_LINE = new ItemBuilder(Material.STICK).setDisplayName("§8» §eOneLine").setLore(TELEPORT_LORE).build();
+    private static final ItemStack BEDWARS = new ItemBuilder(Material.BED).setDisplayName("§8» §eBedWars").setLore(TELEPORT_LORE).build();
+    private static final ItemStack BLACK_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 5).setDisplayName(" ").build();
     private static final ItemStack PAINT_WARS = new ItemBuilder(Material.WOOL).setDisplayName("§8» §4P§ca§6i§en§2t§aW§ba§3r§9s").setLore(TELEPORT_LORE).build();
-    private static final ItemStack SKYWARS = new ItemBuilder(Material.GRASS).setDisplayName("§8» §eSkyWars").setLore(COMING_SOON_LORE).build();
-    private static final ItemStack SOUP_FFA = new ItemBuilder(Material.MUSHROOM_SOUP).setDisplayName("§8» §eSoupFFA").setLore(TELEPORT_LORE).build();
     private static final ItemStack SPAWN = new ItemBuilder(Material.MAGMA_CREAM).setDisplayName("§8» §eSpawn").setLore(Arrays.asList(" ", "§8➥ §6§oLinksklick zum Teleportieren", " ")).build();
-    private static final ItemStack WHITE_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE).setDisplayName(" ").build();
+    private static final ItemStack WHITE_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 4).setDisplayName(" ").build();
 
     private Random random;
     private Lobby lobby;
@@ -67,14 +59,8 @@ public class NavigatorInventory implements Listener {
         }
 
         inventory.setItem(4, PAINT_WARS);
-        inventory.setItem(10, GUIRO);
         inventory.setItem(16, BEDWARS);
-        inventory.setItem(18, SOUP_FFA);
         inventory.setItem(22, SPAWN);
-        inventory.setItem(26, SKYWARS);
-        inventory.setItem(28, BUILD_FFA);
-        inventory.setItem(34, ONE_LINE);
-        inventory.setItem(40, JUMP_AND_RUNS);
 
         ANIMATION_STEPS.put(inventory, 0);
         final AtomicInteger task = new AtomicInteger();
@@ -111,17 +97,9 @@ public class NavigatorInventory implements Listener {
             builder.setLore(" ", "§8× §e" + countPlayers("PaintWars") + "§7 Spieler online", "§8➥ §6§oLinksklick zum Teleportieren", " ");
             inventory.setItem(4, builder.build());
 
-            builder = new ItemBuilder(inventory.getItem(28).clone());
-            builder.setLore(" ", "§8× §e" + countPlayers("TBuildFFA", "BuildFFA") + "§7 Spieler online", "§8➥ §6§oLinksklick zum Teleportieren", " ");
-            inventory.setItem(28, builder.build());
-
-            builder = new ItemBuilder(inventory.getItem(34).clone());
-            builder.setLore(" ", "§8× §e" + countPlayers("Oneline") + "§7 Spieler online", "§8➥ §6§oLinksklick zum Teleportieren", " ");
-            inventory.setItem(34, builder.build());
-
-            builder = new ItemBuilder(inventory.getItem(18).clone());
-            builder.setLore(" ", "§8× §e" + countPlayers("SoupFFA") + "§7 Spieler online", "§8➥ §6§oLinksklick zum Teleportieren", " ");
-            inventory.setItem(18, builder.build());
+            builder = new ItemBuilder(inventory.getItem(16).clone());
+            builder.setLore(" ", "§8× §e" + countPlayers("BedWars") + "§7 Spieler online", "§8➥ §6§oLinksklick zum Teleportieren", " ");
+            inventory.setItem(16, builder.build());
         }
 
         if (tick % 2 != 0)
@@ -190,20 +168,8 @@ public class NavigatorInventory implements Listener {
         if (stack != null) {
             if (stack.equals(SPAWN)) {
                 lobby.getLocationManager().teleport(player, "Spawn");
-            } else if (stack.getType() == GUIRO.getType()) {
-                lobby.getLocationManager().teleport(player, "Freebuild");
-            } else if (stack.getType() == BUILD_FFA.getType()) {
-                lobby.getLocationManager().teleport(player, "BuildFFA");
             } else if (stack.getType() == BEDWARS.getType()) {
                 lobby.getLocationManager().teleport(player, "Bedwars");
-            } else if (stack.getType() == ONE_LINE.getType()) {
-                lobby.getLocationManager().teleport(player, "Oneline");
-            } else if (stack.getType() == SOUP_FFA.getType()) {
-                lobby.getLocationManager().teleport(player, "SoupFFA");
-            } else if (stack.getType() == SKYWARS.getType()) {
-                lobby.getLocationManager().teleport(player, "SkyWars");
-            } else if (stack.equals(JUMP_AND_RUNS)) {
-                lobby.getJumpAndRunInventory().show(player);
             } else if (stack.getType() == PAINT_WARS.getType()) {
                 lobby.getLocationManager().teleport(player, "PaintWars");
             }

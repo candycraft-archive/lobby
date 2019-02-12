@@ -70,8 +70,6 @@ public class Lobby extends JavaPlugin {
     @Getter
     private SkullInventory skullInventory;
     @Getter
-    private JumpAndRunInventory jumpAndRunInventory;
-    @Getter
     private LobbySwitcherInventory lobbySwitcherInventory;
     @Getter
     private NavigatorInventory navigatorInventory;
@@ -154,7 +152,6 @@ public class Lobby extends JavaPlugin {
         this.buyItemInventory = new BuyItemInventory();
         this.profileInventory = new ProfileInventory(this);
         this.skullInventory = new SkullInventory(this);
-        this.jumpAndRunInventory = new JumpAndRunInventory(this);
         this.lobbySwitcherInventory = new LobbySwitcherInventory(this);
         this.navigatorInventory = new NavigatorInventory(this);
         this.playerHiderInventory = new PlayerHiderInventory(this);
@@ -183,7 +180,6 @@ public class Lobby extends JavaPlugin {
 
         /* EVENTS */
         new CancelledEventListener(this);
-        new JumpAndRunListener(this);
         new PlayerInteractAtEntityListener(this);
         new PlayerJoinListener(this);
         new PlayerTeleportListener(this);
@@ -247,10 +243,6 @@ public class Lobby extends JavaPlugin {
 
             if (ticks % 20 == 0) { // update every xp bar segment
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (JumpAndRunListener.getInstance().getJumpAndRuns().containsKey(player.getName())) {
-                        continue;
-                    }
-
                     player.setExp(1f - (ticks % messageTime) / (float) messageTime);
                 }
             }

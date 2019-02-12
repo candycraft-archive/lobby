@@ -32,10 +32,6 @@ public class PlayerMoveListener implements Listener {
 
         if (player.getLocation().getBlock().getType() == Material.WATER_LILY) {
 
-            if (JumpAndRunListener.getInstance().getJumpAndRuns().containsKey(player.getName())) {
-                return;
-            }
-
             if (player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
                 player.setVelocity(player.getLocation().getDirection().setY(1.5));
                 player.playSound(player.getLocation(), Sound.CAT_HISS, 1, 1);
@@ -58,9 +54,7 @@ public class PlayerMoveListener implements Listener {
                         if (onlinePlayer == null)
                             return;
 
-                        if (!JumpAndRunListener.getInstance().getJumpAndRuns().containsKey(name)) {
-                            onlinePlayer.setAllowFlight(true);
-                        }
+                        onlinePlayer.setAllowFlight(true);
                     }, 35);
                 }
             }
