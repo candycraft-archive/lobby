@@ -1,0 +1,18 @@
+name: Lobby
+version: 1.0
+main: de.godtitan.lobby.Lobby
+
+description: NovusMC Lobby
+authors: [GodTitan, pauhull]
+website: NovusMC.de
+depend: [CoinAPI, Friends, SpigotUUIDFetcher]
+softdepend: [Multiverse-Core]
+
+commands:
+  build:
+  eventserver:
+  setlocation:
+  spawn:
+  spawncommunity:
+  text:
+  w:

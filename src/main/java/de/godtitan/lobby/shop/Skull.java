@@ -1,0 +1,157 @@
+package de.godtitan.lobby.shop;
+
+import de.godtitan.lobby.Lobby;
+import de.godtitan.lobby.Messages;
+import de.pauhull.coins.spigot.buyable.SpigotBuyable;
+import lombok.Getter;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.function.Consumer;
+
+public class Skull implements SpigotBuyable {
+
+    public static Skull GODTITAN = new Skull("GodTitan", true, 0);
+    public static Skull DRAGONFIGHTER = new Skull("Dr4gonFighter", true, 0);
+    public static Skull JONAS48JJ = new Skull("Jonas48JJ", true, 0);
+    public static Skull JASSPIS = new Skull("jasspis", true, 0);
+    public static Skull BASTIGHG = new Skull("BastiGHG", false, 1500);
+    public static Skull NORISKK = new Skull("NoRiskk", false, 1000);
+    public static Skull SPIGOTPLUGINS = new Skull("SpigotPlugins", false, 1950);
+    public static Skull NEBELNIEK = new Skull("NebelNiek", false, 3050);
+    public static Skull MINIMICHECKER = new Skull("Minimichecker", false, 1250);
+    public static Skull BYQUADRIX = new Skull("byQuadrix", false, 1100);
+
+    @Getter
+    private static List<Skull> skulls = new ArrayList<>();
+
+    static {
+        skulls.add(GODTITAN);
+        skulls.add(DRAGONFIGHTER);
+        skulls.add(JONAS48JJ);
+        skulls.add(JASSPIS);
+        skulls.add(BASTIGHG);
+        skulls.add(NORISKK);
+        skulls.add(SPIGOTPLUGINS);
+        skulls.add(NEBELNIEK);
+        skulls.add(MINIMICHECKER);
+        skulls.add(BYQUADRIX);
+    }
+
+    @Getter
+    private boolean premium;
+
+    @Getter
+    private int cost;
+
+    @Getter
+    private String owner;
+
+    @Getter
+    private String displayName;
+
+    public Skull(String owner, boolean premium, int cost, String displayName) {
+        Lobby.getInstance().getBuyItemInventory().register(this);
+
+        this.owner = owner;
+        this.premium = premium;
+        this.cost = cost;
+        this.displayName = displayName;
+    }
+
+    public Skull(String owner, boolean premium, int cost) {
+        this(owner, premium, cost, "§8» §e" + owner);
+    }
+
+    public ItemStack getItem() {
+        if (premium) {
+            ItemStack item = Lobby.getInstance().getHeadCache().getHead(owner);
+            ItemMeta meta = item.getItemMeta();
+            meta.setDisplayName(displayName);
+            meta.setLore(Arrays.asList(" ", "§6§lPREMIUM", " "));
+            item.setItemMeta(meta);
+            return item;
+        } else {
+            if (cost == 0) {
+                ItemStack item = Lobby.getInstance().getHeadCache().getHead(owner);
+                ItemMeta meta = item.getItemMeta();
+                meta.setDisplayName(displayName);
+                meta.setLore(Arrays.asList(" ", "§a§lKOSTENLOS", " "));
+                item.setItemMeta(meta);
+                return item;
+            } else {
+                ItemStack item = Lobby.getInstance().getHeadCache().getHead(owner);
+                ItemMeta meta = item.getItemMeta();
+                meta.setDisplayName(displayName);
+                meta.setLore(Arrays.asList(" ", "§eKosten §8» §7" + NumberFormat.getInstance(Locale.GERMAN).format(cost), " "));
+                item.setItemMeta(meta);
+                return item;
+            }
+        }
+    }
+
+    public ItemStack getItemBought() {
+        if (premium) {
+            return getItem();
+        } else {
+            if (cost == 0) {
+                return getItem();
+            } else {
+                ItemStack itemBought = getItem();
+                ItemMeta boughtMeta = itemBought.getItemMeta();
+                boughtMeta.setLore(Arrays.asList(" ", "§eKosten §8» §7" + NumberFormat.getInstance(Locale.GERMAN).format(cost), " ", "§a§lGEKAUFT", " "));
+                itemBought.setItemMeta(boughtMeta);
+                return itemBought;
+            }
+        }
+    }
+
+    @Override
+    public void onCancel(Player player) {
+        Lobby.getInstance().getSkullInventory().show(player);
+    }
+
+    @Override
+    public void onBuy(Player player) {
+        Lobby.getInstance().getSkullsTable().addSkull(player.getUniqueId(), toString());
+        player.sendMessage(Messages.PREFIX + "Du hast dir diesen Kopf §aerfolgreich §7gekauft!");
+        player.closeInventory();
+        player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
+    }
+
+    @Override
+    public void onNotEnoughCoins(Player player) {
+        player.sendMessage(Messages.PREFIX + "Dafür hast du nicht genug §cCoins§7!");
+        player.playSound(player.getLocation(), Sound.BAT_DEATH, 1, 1);
+        player.closeInventory();
+    }
+
+    @Override
+    public void onAlreadyBought(Player player) {
+        player.sendMessage(Messages.PREFIX + "Du §chast§7 diesen Kopf bereits!");
+        player.closeInventory();
+    }
+
+    @Override
+    public void hasBought(Player player, Consumer consumer) {
+        Lobby.getInstance().getSkullsTable().hasSkull(player.getUniqueId(), toString(), consumer);
+    }
+
+    @Override
+    public String getName() {
+        return displayName;
+    }
+
+    @Override
+    public String toString() {
+        return owner;
+    }
+
+}
