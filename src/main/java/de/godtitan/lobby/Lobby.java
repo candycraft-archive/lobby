@@ -104,7 +104,7 @@ public class Lobby extends JavaPlugin {
     @Getter
     private boolean weather = false;
     private List<String> messages = Arrays.asList(
-            "§8» §6§lNEU: §a§lBuildFFA §8§l● §a§lrelease §8«",
+            "§8» §6§lNEU: §a§l30%§7-§4§lSALE! §6§l/shop§7! §8«",
             "§8» §7Du benötigst Hilfe? §6§l/support§7! §8«",
             "§8» §6§lTS³: §b/teamspeak §8«",
             "§8» §6§lNEU: §a§l/forum §8«",
