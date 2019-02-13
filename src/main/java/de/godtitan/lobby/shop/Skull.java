@@ -20,14 +20,12 @@ public class Skull implements SpigotBuyable {
 
     public static Skull GODTITAN = new Skull("GodTitan", true, 0);
     public static Skull DRAGONFIGHTER = new Skull("Dr4gonFighter", true, 0);
-    public static Skull JONAS48JJ = new Skull("Jonas48JJ", true, 0);
-    public static Skull JASSPIS = new Skull("jasspis", true, 0);
-    public static Skull BASTIGHG = new Skull("BastiGHG", false, 1500);
-    public static Skull NORISKK = new Skull("NoRiskk", false, 1000);
-    public static Skull SPIGOTPLUGINS = new Skull("SpigotPlugins", false, 1950);
-    public static Skull NEBELNIEK = new Skull("NebelNiek", false, 3050);
-    public static Skull MINIMICHECKER = new Skull("Minimichecker", false, 1250);
-    public static Skull BYQUADRIX = new Skull("byQuadrix", false, 1100);
+    public static Skull CODEEXCEPTION = new Skull("CodeException", true, 0);
+    public static Skull PAUHULL = new Skull("pauhull", true, 0);
+    public static Skull BASTIGHG = new Skull("leStylex", false, 1500);
+    public static Skull NORISKK = new Skull("LOGO", false, 1000);
+    public static Skull MINIMICHECKER = new Skull("DerNiccl", false, 1250);
+    public static Skull BYQUADRIX = new Skull("LeKoopa", false, 1100);
 
     @Getter
     private static List<Skull> skulls = new ArrayList<>();
@@ -35,12 +33,10 @@ public class Skull implements SpigotBuyable {
     static {
         skulls.add(GODTITAN);
         skulls.add(DRAGONFIGHTER);
-        skulls.add(JONAS48JJ);
-        skulls.add(JASSPIS);
+        skulls.add(CODEEXCEPTION);
+        skulls.add(PAUHULL);
         skulls.add(BASTIGHG);
         skulls.add(NORISKK);
-        skulls.add(SPIGOTPLUGINS);
-        skulls.add(NEBELNIEK);
         skulls.add(MINIMICHECKER);
         skulls.add(BYQUADRIX);
     }

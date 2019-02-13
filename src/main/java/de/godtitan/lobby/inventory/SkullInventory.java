@@ -47,13 +47,11 @@ public class SkullInventory implements Listener {
 
         inventory.setItem(1, Skull.GODTITAN.getItem());
         inventory.setItem(3, Skull.DRAGONFIGHTER.getItem());
-        inventory.setItem(5, Skull.JONAS48JJ.getItem());
-        inventory.setItem(7, Skull.JASSPIS.getItem());
+        inventory.setItem(5, Skull.CODEEXCEPTION.getItem());
+        inventory.setItem(7, Skull.PAUHULL.getItem());
 
         placeInInventory(player, inventory, 20, Skull.BASTIGHG);
         placeInInventory(player, inventory, 29, Skull.NORISKK);
-        placeInInventory(player, inventory, 37, Skull.SPIGOTPLUGINS);
-        placeInInventory(player, inventory, 47, Skull.NEBELNIEK);
         placeInInventory(player, inventory, 24, Skull.MINIMICHECKER);
         placeInInventory(player, inventory, 33, Skull.BYQUADRIX);
 
