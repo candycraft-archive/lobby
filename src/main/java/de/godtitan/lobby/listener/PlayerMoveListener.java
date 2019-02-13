@@ -38,7 +38,7 @@ public class PlayerMoveListener implements Listener {
             }
         }
 
-        if (!BuildCommand.getBuilding().contains(player.getName())) {
+        if (!BuildCommand.getBuilding().contains(player.getName()) && !player.hasPermission("lobby.fly")) {
             if (player.isFlying()) {
                 player.setFlying(false);
 

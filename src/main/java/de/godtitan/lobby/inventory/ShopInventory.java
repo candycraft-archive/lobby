@@ -33,23 +33,15 @@ public class ShopInventory implements Listener {
     }
 
     public void show(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, 27, TITLE);
-
-        for (int i = 0; i < inventory.getSize(); i++) {
-            if (i < 9 || i > 17) {
-                inventory.setItem(i, BLACK_GLASS);
-            } else {
-                inventory.setItem(i, WHITE_GLASS);
-            }
-        }
+        Inventory inventory = Bukkit.createInventory(null, 9, TITLE);
 
         ItemStack skull = lobby.getHeadCache().getHead(player.getName());
         ItemMeta meta = skull.getItemMeta();
         meta.setDisplayName("§8» §eKöpfe");
         skull.setItemMeta(meta);
-        inventory.setItem(10, skull);
-        inventory.setItem(13, BOOTS);
-        inventory.setItem(16, BALLOONS);
+        inventory.setItem(1, skull);
+        inventory.setItem(4, BOOTS);
+        inventory.setItem(7, BALLOONS);
 
         player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1, 1);
         player.openInventory(inventory);
