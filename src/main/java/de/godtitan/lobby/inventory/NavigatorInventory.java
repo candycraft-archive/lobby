@@ -6,6 +6,7 @@ import cloud.timo.TimoCloud.api.objects.ServerObject;
 import de.godtitan.lobby.Lobby;
 import de.godtitan.lobby.util.ItemBuilder;
 import de.godtitan.lobby.util.LobbyItems;
+import de.godtitan.lobby.util.Skull;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -20,19 +21,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NavigatorInventory implements Listener {
 
     private static final String TITLE = "§cNavigator";
     private static final Map<Inventory, Integer> ANIMATION_STEPS = new HashMap<>();
-    private static final List<String> TELEPORT_LORE = Arrays.asList(" ", "§8× §cLädt...", "§8➥ §6§oLinksklick zum Teleportieren", " ");
-    private static final ItemStack BEDWARS = new ItemBuilder(Material.BED).setDisplayName("§8» §eBedWars").setLore(TELEPORT_LORE).build();
-    private static final ItemStack BLACK_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 5).setDisplayName(" ").build();
-    private static final ItemStack PAINT_WARS = new ItemBuilder(Material.WOOL).setDisplayName("§8» §4P§ca§6i§en§2t§aW§ba§3r§9s").setLore(TELEPORT_LORE).build();
-    private static final ItemStack SPAWN = new ItemBuilder(Material.MAGMA_CREAM).setDisplayName("§8» §eSpawn").setLore(Arrays.asList(" ", "§8➥ §6§oLinksklick zum Teleportieren", " ")).build();
-    private static final ItemStack WHITE_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 4).setDisplayName(" ").build();
+    private static final ItemStack BEDWARS = new ItemBuilder(Material.BED).setDisplayName("§6§lBed§c§lWars").build();
+    //private static final ItemStack BLACK_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 13).setDisplayName(" ").build();
+    private static final ItemStack PAINT_WARS = new ItemBuilder(Material.WOOL).setDisplayName("PaintWars").build();
+    private static final ItemStack SPAWN = new ItemBuilder(Material.MAGMA_CREAM).setDisplayName("§f§lSpawn").build();
+    //private static final ItemStack WHITE_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 4).setDisplayName(" ").build();
+    private final ItemStack CANDY_CANE;
+    private final ItemStack GINGERBREAD;
 
     private Random random;
     private Lobby lobby;
@@ -44,12 +49,16 @@ public class NavigatorInventory implements Listener {
         this.random = new Random();
 
         Bukkit.getPluginManager().registerEvents(this, lobby);
+
+        CANDY_CANE = new ItemBuilder(Skull.getFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGNjM2Y3ODFjOTIzYTI4ODdmMTRjMWVlYTExMDUwMTY2OTY2ZjI2MDI1Nzg0MDFmMTQ1MWU2MDk3Yjk3OWRmIn19fQ==")).setDisplayName("§f§lCandy§c§lCane §8§l(§d§l1.8§7 - §d§l1.12§8§l)").build();
+        GINGERBREAD = new ItemBuilder(Skull.getFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTQ0MjJhODJjODk5YTljMTQ1NDM4NGQzMmNjNTRjNGFlN2ExYzRkNzI0MzBlNmU0NDZkNTNiOGIzODVlMzMwIn19fQ==")).setDisplayName("§6§lGingerbread §8§l(§d§l1.13§8§l)").build();
     }
 
     public void show(Player player) {
 
-        Inventory inventory = Bukkit.createInventory(null, 45, TITLE);
+        Inventory inventory = Bukkit.createInventory(null, 27, TITLE);
 
+        /*
         int[] whiteGlass = new int[]{0, 1, 3, 5, 7, 8, 11, 13, 15, 21, 23, 29, 31, 33, 36, 37, 39, 41, 43, 44};
         for (int i = 0; i < inventory.getSize(); i++) {
             inventory.setItem(i, BLACK_GLASS);
@@ -57,10 +66,13 @@ public class NavigatorInventory implements Listener {
         for (int i = 0; i < whiteGlass.length; i++) {
             inventory.setItem(whiteGlass[i], WHITE_GLASS);
         }
+        */
 
-        inventory.setItem(4, PAINT_WARS);
-        inventory.setItem(16, BEDWARS);
-        inventory.setItem(22, SPAWN);
+        inventory.setItem(12, PAINT_WARS);
+        inventory.setItem(14, BEDWARS);
+        inventory.setItem(13, SPAWN);
+        inventory.setItem(22, GINGERBREAD);
+        inventory.setItem(4, CANDY_CANE);
 
         ANIMATION_STEPS.put(inventory, 0);
         final AtomicInteger task = new AtomicInteger();
@@ -83,6 +95,7 @@ public class NavigatorInventory implements Listener {
 
         player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1, 1);
         player.openInventory(inventory);
+        animate(inventory, -1);
     }
 
     public void animate(Inventory inventory, int tick) {
@@ -92,35 +105,46 @@ public class NavigatorInventory implements Listener {
         if (player == null)
             return;
 
-        if ((tick + 1) % 20 == 0) {
-            ItemBuilder builder = new ItemBuilder(inventory.getItem(4).clone());
-            builder.setLore(" ", "§8× §e" + countPlayers("PaintWars") + "§7 Spieler online", "§8➥ §6§oLinksklick zum Teleportieren", " ");
+        if ((tick + 1) % 20 == 0 || tick == -1) {
+            ItemBuilder builder = new ItemBuilder(inventory.getItem(12).clone());
+            builder.setLore("§7Spieler: §a" + countPlayers("PaintWars"));
+            inventory.setItem(12, builder.build());
+
+            builder = new ItemBuilder(CANDY_CANE);
+            ServerObject server = TimoCloudAPI.getUniversalAPI().getServer("Lobby-1");
+            builder.setLore("§7Spieler: §a" + server.getOnlinePlayerCount() + "§7/§a" + server.getMaxPlayerCount());
             inventory.setItem(4, builder.build());
 
-            builder = new ItemBuilder(inventory.getItem(16).clone());
-            builder.setLore(" ", "§8× §e" + countPlayers("BedWars") + "§7 Spieler online", "§8➥ §6§oLinksklick zum Teleportieren", " ");
-            inventory.setItem(16, builder.build());
+            builder = new ItemBuilder(GINGERBREAD);
+            server = TimoCloudAPI.getUniversalAPI().getServer("Lobby-1");
+            builder.setLore("§7Spieler: §a" + server.getOnlinePlayerCount() + "§7/§a" + server.getMaxPlayerCount());
+            inventory.setItem(22, builder.build());
+
+            builder = new ItemBuilder(inventory.getItem(23).clone());
+            builder.setLore("§7Spieler: §a" + countPlayers("BedWars"));
+            inventory.setItem(14, builder.build());
         }
 
-        if (tick % 2 != 0)
+        if (tick % 2 != 0 && tick != -1)
             return;
 
         StringBuilder colouredName = null;
 
         // name animation is buggy on newer versions
         if (getVersion(player) <= 47) {
-            colouredName = new StringBuilder("§8» ");
+            colouredName = new StringBuilder();
             String name = "PaintWars";
             for (int i = 0; i < name.length(); i++) {
                 colouredName.append('§');
                 colouredName.append(chatColors[((tick / 2) + i) % chatColors.length]);
+                colouredName.append("§l");
                 colouredName.append(name.charAt(i));
             }
         }
 
-        ItemStack stack = inventory.getItem(4);
+        ItemStack stack = inventory.getItem(12);
         if (stack != null) {
-            if (tick % 10 == 0) {
+            if (tick % 10 == 0 || tick == -1) {
                 short color;
                 do { // not the same color again
                     color = availableColors[random.nextInt(availableColors.length)];
@@ -133,7 +157,7 @@ public class NavigatorInventory implements Listener {
                 stack.setItemMeta(meta);
             }
 
-            inventory.setItem(4, stack);
+            inventory.setItem(12, stack);
 
             if (getVersion(player) <= 47) {
                 player.updateInventory();

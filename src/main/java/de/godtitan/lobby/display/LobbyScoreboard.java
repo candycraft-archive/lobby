@@ -21,31 +21,32 @@ public class LobbyScoreboard extends NovusScoreboard {
     @Override
     public void show() {
 
-        this.coins = new NovusScore("§f§f Lädt...");
-        new NovusScore("§cCoins:");
+        this.coins = new NovusScore("§d Lädt...");
+        new NovusScore("Coins:");
         new NovusScore();
-        new NovusScore("§f frag moritz");
-        new NovusScore("§cTeamSpeak:");
+        new NovusScore("§c frag moritz");
+        new NovusScore("TeamSpeak:");
         new NovusScore();
-        this.rank = new NovusScore("§f Lädt...");
-        new NovusScore("§cRang:");
+        this.rank = new NovusScore("§b Lädt...");
+        new NovusScore("Rang:");
         new NovusScore();
-        new NovusScore("§f " + TimoCloudAPI.getBukkitAPI().getThisServer().getName().replace('-', ' '));
-        new NovusScore("§cServer:");
+        new NovusScore("§a " + TimoCloudAPI.getBukkitAPI().getThisServer().getName().replace('-', ' '));
+        new NovusScore("Server:");
+        new NovusScore();
 
         super.show();
     }
 
     @Override
     public void update() {
-        String rankScore = "§f " + getPlayerGroup(player);
+        String rankScore = "§b " + getPlayerGroup(player);
         if (!rank.getScore().getEntry().equals(rankScore)) {
             rank.setName(rankScore);
         }
 
         CoinAPI.getInstance().getCoins(player.getUniqueId(), coins -> {
             NumberFormat format = NumberFormat.getInstance(Locale.GERMAN);
-            String coinsScore = "§f " + format.format(coins);
+            String coinsScore = "§d " + format.format(coins);
             if (!this.coins.getScore().getEntry().equals(coinsScore)) {
                 this.coins.setName(coinsScore);
             }

@@ -11,7 +11,7 @@ public class LobbyItems {
     public static final ItemStack LOBBY_SWITCHER = new ItemBuilder(Material.NETHER_STAR).setDisplayName("§dLobbyswitcher §7§o<Rechtsklick>").build();
     public static final ItemStack SHOP = new ItemBuilder(Material.CHEST).setDisplayName("§dShop §7§o<Rechtsklick>").build();
     public static final ItemStack PLAYER_HIDER = new ItemBuilder(Material.BLAZE_ROD).setDisplayName("§dSpieler verstecken §7§o<Rechtsklick>").build();
-    public static final ItemStack NICK = new ItemBuilder(Material.NAME_TAG).setDisplayName("§5Autonick §7§o<Rechtsklick>").build();
+    public static final ItemStack NICK = new ItemBuilder(Material.NAME_TAG).setDisplayName("§dAutonick §7§o<Rechtsklick>").build();
 
     public void giveItems(Player player) {
 
