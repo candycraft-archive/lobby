@@ -20,6 +20,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +52,7 @@ public class NavigatorInventory implements Listener {
         this.random = new Random();
 
         Bukkit.getPluginManager().registerEvents(this, lobby);
-
+        Bukkit.getMessenger().registerOutgoingPluginChannel(lobby, "BungeeCord");
         CANDY_CANE = new ItemBuilder(Skull.getFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGNjM2Y3ODFjOTIzYTI4ODdmMTRjMWVlYTExMDUwMTY2OTY2ZjI2MDI1Nzg0MDFmMTQ1MWU2MDk3Yjk3OWRmIn19fQ==")).setDisplayName("§f§lCandy§c§lCane §8§l(§d§l1.8§7 - §d§l1.12§8§l)").build();
         GINGERBREAD = new ItemBuilder(Skull.getFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTQ0MjJhODJjODk5YTljMTQ1NDM4NGQzMmNjNTRjNGFlN2ExYzRkNzI0MzBlNmU0NDZkNTNiOGIzODVlMzMwIn19fQ==")).setDisplayName("§6§lGingerbread §8§l(§d§l1.13§8§l)").build();
     }
@@ -111,7 +114,7 @@ public class NavigatorInventory implements Listener {
             inventory.setItem(12, builder.build());
 
             builder = new ItemBuilder(CANDY_CANE);
-            ServerObject server = TimoCloudAPI.getUniversalAPI().getServer("Lobby-1");
+            ServerObject server = TimoCloudAPI.getUniversalAPI().getServer("CandyCane");
             builder.setLore("§7Spieler: §a" + server.getOnlinePlayerCount() + "§7/§a" + server.getMaxPlayerCount());
             inventory.setItem(4, builder.build());
 
@@ -120,7 +123,7 @@ public class NavigatorInventory implements Listener {
             builder.setLore("§7Spieler: §a" + server.getOnlinePlayerCount() + "§7/§a" + server.getMaxPlayerCount());
             inventory.setItem(22, builder.build());
 
-            builder = new ItemBuilder(inventory.getItem(23).clone());
+            builder = new ItemBuilder(inventory.getItem(14).clone());
             builder.setLore("§7Spieler: §a" + countPlayers("BedWars"));
             inventory.setItem(14, builder.build());
         }
@@ -196,6 +199,18 @@ public class NavigatorInventory implements Listener {
                 lobby.getLocationManager().teleport(player, "Bedwars");
             } else if (stack.getType() == PAINT_WARS.getType()) {
                 lobby.getLocationManager().teleport(player, "PaintWars");
+            } else if (stack.getType() == CANDY_CANE.getType()) {
+                ByteArrayOutputStream b = new ByteArrayOutputStream();
+
+                DataOutputStream out= new DataOutputStream(b);
+                try {
+                    out.writeUTF("Connect");
+                    out.writeUTF("CandyCane");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                player.sendPluginMessage(lobby, "BungeeCord", b.toByteArray());
+
             }
         }
     }
