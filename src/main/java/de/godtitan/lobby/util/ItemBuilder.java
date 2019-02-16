@@ -52,6 +52,11 @@ public class ItemBuilder {
         return setLore(Arrays.asList(lore));
     }
 
+    public ItemBuilder setAmount(int amount) {
+        stack.setAmount(amount);
+        return this;
+    }
+
     public ItemBuilder setLore(List<String> lore) {
         ItemMeta meta = stack.getItemMeta();
         meta.setLore(lore);

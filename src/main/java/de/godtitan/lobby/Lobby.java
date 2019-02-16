@@ -62,6 +62,8 @@ public class Lobby extends JavaPlugin {
 
     /* INVENTORIES */
     @Getter
+    private ServerInventory serverInventory;
+    @Getter
     private BootsInventory bootsInventory;
     @Getter
     private BuyItemInventory buyItemInventory;
@@ -148,6 +150,7 @@ public class Lobby extends JavaPlugin {
         this.headCache = new HeadCache();
 
         /* INVENTORIES */
+        this.serverInventory = new ServerInventory(this);
         this.bootsInventory = new BootsInventory(this);
         this.buyItemInventory = new BuyItemInventory();
         this.profileInventory = new ProfileInventory(this);
@@ -175,6 +178,7 @@ public class Lobby extends JavaPlugin {
         new WeatherCommand(this);
         new SetLocationCommand(this);
         new SpawnCommand(this);
+        new SpawnVillagerCommand(this);
         new TextCommand(this);
         new SpawnCommunityCommand(this);
 
@@ -193,7 +197,6 @@ public class Lobby extends JavaPlugin {
         /* ACTION BAR */
         this.sendActionBar();
 
-        /* BUNGEECORD CHANNEL REGISTER */
         SpawnCommunityCommand.updateCrystals(this);
 
         EntityBalloon.schedule();
@@ -202,6 +205,8 @@ public class Lobby extends JavaPlugin {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.setAllowFlight(true);
         }
+
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     }
 
     public void teleportToSpawn(Player player) {

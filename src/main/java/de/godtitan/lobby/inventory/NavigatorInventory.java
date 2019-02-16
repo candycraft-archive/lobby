@@ -120,7 +120,7 @@ public class NavigatorInventory implements Listener {
             builder.setLore("§7Spieler: §a" + server.getOnlinePlayerCount() + "§7/§a" + server.getMaxPlayerCount());
             inventory.setItem(22, builder.build());
 
-            builder = new ItemBuilder(inventory.getItem(23).clone());
+            builder = new ItemBuilder(inventory.getItem(14).clone());
             builder.setLore("§7Spieler: §a" + countPlayers("BedWars"));
             inventory.setItem(14, builder.build());
         }
@@ -193,9 +193,9 @@ public class NavigatorInventory implements Listener {
             if (stack.equals(SPAWN)) {
                 lobby.getLocationManager().teleport(player, "Spawn");
             } else if (stack.getType() == BEDWARS.getType()) {
-                lobby.getLocationManager().teleport(player, "Bedwars");
+                lobby.getServerInventory().show(player, "BedWars");
             } else if (stack.getType() == PAINT_WARS.getType()) {
-                lobby.getLocationManager().teleport(player, "PaintWars");
+                lobby.getServerInventory().show(player, "PaintWars");
             }
         }
     }
