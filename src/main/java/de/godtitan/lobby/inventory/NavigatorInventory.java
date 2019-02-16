@@ -118,7 +118,7 @@ public class NavigatorInventory implements Listener {
             inventory.setItem(4, builder.build());
 
             builder = new ItemBuilder(GINGERBREAD);
-            server = TimoCloudAPI.getUniversalAPI().getServer("Lobby-1");
+            server = TimoCloudAPI.getUniversalAPI().getServer("Gingerbread");
             builder.setLore("§7Spieler: §a" + server.getOnlinePlayerCount() + "§7/§a" + server.getMaxPlayerCount());
             inventory.setItem(22, builder.build());
 
@@ -198,10 +198,15 @@ public class NavigatorInventory implements Listener {
                 lobby.getServerInventory().show(player, "BedWars");
             } else if (stack.getType() == PAINT_WARS.getType()) {
                 lobby.getServerInventory().show(player, "PaintWars");
-            } else if (stack.getType() == CANDY_CANE.getType()) {
+            } else if (stack.getType() == CANDY_CANE.getType() && event.getSlot() == 4) {
                 ByteArrayDataOutput out = ByteStreams.newDataOutput();
                 out.writeUTF("Connect");
                 out.writeUTF("CandyCane");
+                player.sendPluginMessage(lobby, "BungeeCord", out.toByteArray());
+            } else if (stack.getType() == GINGERBREAD.getType() && event.getSlot() == 22) {
+                ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                out.writeUTF("Connect");
+                out.writeUTF("Gingerbread");
                 player.sendPluginMessage(lobby, "BungeeCord", out.toByteArray());
             }
         }
