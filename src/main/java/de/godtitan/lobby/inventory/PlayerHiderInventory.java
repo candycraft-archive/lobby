@@ -28,14 +28,7 @@ import java.util.Map;
 public class PlayerHiderInventory implements Listener {
 
     private static final String TITLE = "§cSpieler verstecken";
-    private static final List<String> SELECTED_LORE = Arrays.asList(" ", "§a§lAUSGEWÄHLT", " ");
-    private static final ItemStack BLACK_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 15).setDisplayName(" ").build();
-    private static final ItemStack GREEN_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5).setDisplayName(" ").build();
-    private static final ItemStack GREEN_GLASS_SELECTED = new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 5).setDisplayName(" ").addEnchant(Enchantment.DURABILITY, 1).addItemFlag(ItemFlag.HIDE_ENCHANTS).build();
-    private static final ItemStack PURPLE_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 10).setDisplayName(" ").build();
-    private static final ItemStack PURPLE_GLASS_SELECTED = new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 10).setDisplayName(" ").addEnchant(Enchantment.DURABILITY, 1).addItemFlag(ItemFlag.HIDE_ENCHANTS).build();
-    private static final ItemStack RED_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14).setDisplayName(" ").build();
-    private static final ItemStack RED_GLASS_SELECTED = new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14).setDisplayName(" ").addEnchant(Enchantment.DURABILITY, 1).addItemFlag(ItemFlag.HIDE_ENCHANTS).build();
+    private static final List<String> SELECTED_LORE = Arrays.asList(" ", "§a§oAktiv", " ");
     private static final ItemStack PLAYERS = new ItemBuilder(Material.STAINED_CLAY, (short) 5).setDisplayName("§8» §a§lAlle Spieler anzeigen").build();
     private static final ItemStack PLAYERS_SELECTED = new ItemBuilder(Material.STAINED_CLAY, (short) 5).setDisplayName("§8» §a§lAlle Spieler anzeigen").addEnchant(Enchantment.DURABILITY, 1).addItemFlag(ItemFlag.HIDE_ENCHANTS).setLore(SELECTED_LORE).build();
     private static final ItemStack TEAM = new ItemBuilder(Material.STAINED_CLAY, (short) 10).setDisplayName("§8» §5§lNur Freunde, VIPs und Teammitglieder anzeigen").build();
@@ -54,39 +47,24 @@ public class PlayerHiderInventory implements Listener {
     }
 
     public void show(Player player) {
-        Inventory inventory = Bukkit.createInventory(null, 27, TITLE);
-        for (int i = 0; i < inventory.getSize(); i++) {
-            inventory.setItem(i, BLACK_GLASS);
-        }
+        Inventory inventory = Bukkit.createInventory(null, 9, TITLE);
 
         if (hideModes.get(player.getName()) == HideMode.ALL || !hideModes.containsKey(player.getName())) {
-            inventory.setItem(1, GREEN_GLASS_SELECTED);
-            inventory.setItem(10, PLAYERS_SELECTED);
-            inventory.setItem(19, GREEN_GLASS_SELECTED);
+            inventory.setItem(1, PLAYERS_SELECTED);
         } else {
-            inventory.setItem(1, GREEN_GLASS);
-            inventory.setItem(10, PLAYERS);
-            inventory.setItem(19, GREEN_GLASS);
+            inventory.setItem(1, PLAYERS);
         }
 
         if (hideModes.get(player.getName()) == HideMode.TEAM) {
-            inventory.setItem(4, PURPLE_GLASS_SELECTED);
-            inventory.setItem(13, TEAM_SELECTED);
-            inventory.setItem(22, PURPLE_GLASS_SELECTED);
+            inventory.setItem(4, TEAM_SELECTED);
         } else {
-            inventory.setItem(4, PURPLE_GLASS);
-            inventory.setItem(13, TEAM);
-            inventory.setItem(22, PURPLE_GLASS);
+            inventory.setItem(4, TEAM);
         }
 
         if (hideModes.get(player.getName()) == HideMode.NONE) {
-            inventory.setItem(7, RED_GLASS_SELECTED);
-            inventory.setItem(16, NONE_SELECTED);
-            inventory.setItem(25, RED_GLASS_SELECTED);
+            inventory.setItem(7, NONE_SELECTED);
         } else {
-            inventory.setItem(7, RED_GLASS);
-            inventory.setItem(16, NONE);
-            inventory.setItem(25, RED_GLASS);
+            inventory.setItem(7, NONE);
         }
 
         player.openInventory(inventory);

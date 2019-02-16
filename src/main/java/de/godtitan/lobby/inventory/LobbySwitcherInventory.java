@@ -27,7 +27,6 @@ import java.util.List;
 public class LobbySwitcherInventory implements Listener {
 
     private static final String TITLE = "§cLobbyswitcher";
-    private static final ItemStack BLACK_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 15).setDisplayName(" ").build();
 
     private Lobby lobby;
 
@@ -42,14 +41,9 @@ public class LobbySwitcherInventory implements Listener {
         Collection<ServerObject> servers = TimoCloudAPI.getUniversalAPI().getServerGroup("Lobby").getServers();
         ServerObject currentServer = TimoCloudAPI.getBukkitAPI().getThisServer();
 
-        Inventory inventory = Bukkit.createInventory(null, (int) (Math.ceil((double) servers.size() / 9.0) * 9) + 18, TITLE);
-        for (int i = 0; i < inventory.getSize(); i++) {
-            if (i < 9 || i > inventory.getSize() - 10) {
-                inventory.setItem(i, BLACK_GLASS);
-            }
-        }
+        Inventory inventory = Bukkit.createInventory(null, (int) (Math.ceil((double) servers.size() / 9.0) * 9), TITLE);
 
-        int index = 9;
+        int index = 0;
         for (ServerObject server : servers) {
             Material material;
             if (server.getName().equals(currentServer.getName())) {
