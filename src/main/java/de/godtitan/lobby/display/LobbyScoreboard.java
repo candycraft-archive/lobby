@@ -24,7 +24,7 @@ public class LobbyScoreboard extends NovusScoreboard {
         this.coins = new NovusScore("§d Lädt...");
         new NovusScore("Coins:");
         new NovusScore();
-        new NovusScore("§c frag moritz");
+        new NovusScore("§c CandyCraft.de");
         new NovusScore("TeamSpeak:");
         new NovusScore();
         this.rank = new NovusScore("§b Lädt...");

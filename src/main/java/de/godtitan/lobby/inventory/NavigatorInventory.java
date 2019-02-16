@@ -3,6 +3,8 @@ package de.godtitan.lobby.inventory;
 import cloud.timo.TimoCloud.api.TimoCloudAPI;
 import cloud.timo.TimoCloud.api.objects.ServerGroupObject;
 import cloud.timo.TimoCloud.api.objects.ServerObject;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import de.godtitan.lobby.Lobby;
 import de.godtitan.lobby.util.ItemBuilder;
 import de.godtitan.lobby.util.LobbyItems;
@@ -111,7 +113,7 @@ public class NavigatorInventory implements Listener {
             inventory.setItem(12, builder.build());
 
             builder = new ItemBuilder(CANDY_CANE);
-            ServerObject server = TimoCloudAPI.getUniversalAPI().getServer("Lobby-1");
+            ServerObject server = TimoCloudAPI.getUniversalAPI().getServer("CandyCane");
             builder.setLore("§7Spieler: §a" + server.getOnlinePlayerCount() + "§7/§a" + server.getMaxPlayerCount());
             inventory.setItem(4, builder.build());
 
@@ -196,6 +198,11 @@ public class NavigatorInventory implements Listener {
                 lobby.getServerInventory().show(player, "BedWars");
             } else if (stack.getType() == PAINT_WARS.getType()) {
                 lobby.getServerInventory().show(player, "PaintWars");
+            } else if (stack.getType() == CANDY_CANE.getType()) {
+                ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                out.writeUTF("Connect");
+                out.writeUTF("CandyCane");
+                player.sendPluginMessage(lobby, "BungeeCord", out.toByteArray());
             }
         }
     }
