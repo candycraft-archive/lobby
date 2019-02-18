@@ -115,7 +115,7 @@ public class ServerInventory implements Listener {
         if (stack != null) {
             if (stack.getItemMeta() == null) return;
 
-            if (stack.getType() == Material.REDSTONE_BLOCK) {
+            if (stack.getType() != Material.EMERALD_BLOCK) {
                 player.playSound(player.getLocation(), Sound.NOTE_BASS, 1, 1);
                 return;
             }

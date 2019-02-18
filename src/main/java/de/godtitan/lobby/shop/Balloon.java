@@ -45,11 +45,12 @@ public enum Balloon implements SpigotBuyable {
     ASTRONAUT("astronaut", "§8» §eAstronaut", 7000, "YoMamasMC"),
     CREEPER("creeper", "§8» §eCreeper", 8000, "Mrman"),
     DUCK("duck", "§8» §eEnte", 4500, "Hacking"),
-    JASSPIS("jasspis", "§8» §ejasspis", 0, "jasspis"),
-    BANANA("pauhull", "§8» §eBanane", 0, "pauhull"),
+    PAUHULL("pauhull", "§8» §epauhull", 0, "pauhull"),
     UGANDAN_KNUCKLE("uganda", "§8» §eUgandan Knuckle", 0, "deadmeme_"),
     FANCY_CUBE("cube", "§8» §eFancy Cube", 0, "Pesse_"),
-    BETA("beta", "§8» §6Beta Geschenk", -1, "StackedGold");
+    BETA("beta", "§8» §6Beta Geschenk", -1, "StackedGold"),
+    STYLEX("stylex", "§8» §6leStylex", -1, "leStylex");
+
 
     @Getter
     private boolean premium = false;

@@ -136,11 +136,13 @@ public class PlayerHiderInventory implements Listener {
                     all.showPlayer(player);
                 } else {
                     SpigotFriends.getInstance().getFriendTable().areFriends(player.getUniqueId(), all.getUniqueId(), areFriends -> {
-                        if (areFriends) {
-                            all.showPlayer(player);
-                        } else {
-                            all.hidePlayer(player);
-                        }
+                        Bukkit.getScheduler().runTask(lobby, () -> {
+                            if (areFriends) {
+                                all.showPlayer(player);
+                            } else {
+                                all.hidePlayer(player);
+                            }
+                        });
                     });
                 }
             } else if (hideMode == HideMode.NONE) {
