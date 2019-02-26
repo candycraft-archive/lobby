@@ -115,7 +115,11 @@ public class ServerInventory implements Listener {
         if (stack != null) {
             if (stack.getItemMeta() == null) return;
 
-            if (stack.getType() != Material.EMERALD_BLOCK) {
+            String[] players = ChatColor.stripColor(stack.getItemMeta().getLore().get(1)).split("/");
+            int onlinePlayers = Integer.parseInt(players[0]);
+            int maxPlayers = Integer.parseInt(players[1]);
+
+            if (onlinePlayers >= maxPlayers) {
                 player.playSound(player.getLocation(), Sound.NOTE_BASS, 1, 1);
                 return;
             }
