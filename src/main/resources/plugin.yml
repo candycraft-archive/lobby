@@ -1,6 +1,6 @@
 name: Lobby
 version: 1.0
-main: de.godtitan.lobby.Lobby
+main: de.pauhull.lobby.Lobby
 
 description: NovusMC Lobby
 authors: [GodTitan, pauhull]
