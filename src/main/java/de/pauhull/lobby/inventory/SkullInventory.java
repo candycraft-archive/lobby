@@ -21,10 +21,10 @@ import java.util.ArrayList;
 public class SkullInventory implements Listener {
 
     private static final String TITLE = "§cKöpfe";
-    private static final ItemStack BLACK_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 15).setDisplayName(" ").build();
+    private static final ItemStack BLACK_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 15).setDisplayName(" ").build();
     private static final ItemStack WHITE_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE).setDisplayName(" ").build();
     private static final ItemStack REMOVE = new ItemBuilder(Material.BARRIER).setDisplayName("§8» §cKopf absetzen").build();
-    private static final ItemStack BACK = new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14).setDisplayName("§8» §cZurück").build();
+    private static final ItemStack BACK = new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 14).setDisplayName("§8» §cZurück").build();
 
     private Lobby lobby;
 
@@ -130,7 +130,7 @@ public class SkullInventory implements Listener {
     }
 
     private void placeInInventory(Player player, Inventory inventory, int slot, Skull skull) {
-        lobby.getSkullsTable().hasSkull(player.getUniqueId(), skull.getOwner(), hasHead -> {
+        skull.hasBought(player, hasHead -> {
             if (hasHead) {
                 inventory.setItem(slot, skull.getItemBought());
             } else {

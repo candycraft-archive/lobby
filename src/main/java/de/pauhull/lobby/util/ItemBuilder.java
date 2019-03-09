@@ -1,6 +1,7 @@
 package de.pauhull.lobby.util;
 
 import lombok.Getter;
+import lombok.ToString;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -12,18 +13,21 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Created by Paul
+ * on 07.12.2018
+ *
+ * @author pauhull
+ */
+@ToString
 public class ItemBuilder {
 
     @Getter
     private ItemStack stack;
-
-    @Deprecated
-    public ItemBuilder(Material material, short durability) {
-        this(material, 1, durability);
-    }
 
     public ItemBuilder(Material material, int amount, short durability) {
         this.stack = new ItemStack(material, amount, durability);
@@ -38,7 +42,41 @@ public class ItemBuilder {
     }
 
     public ItemBuilder(ItemStack stack) {
-        this.stack = stack;
+        this.stack = stack.clone();
+    }
+
+    public ItemBuilder(Material material, int amount) {
+        this(material, amount, (short) 0);
+    }
+
+    public ItemBuilder hidePotionEffects() {
+        return addItemFlag(ItemFlag.HIDE_POTION_EFFECTS);
+    }
+
+    public ItemBuilder setDurability(short durability) {
+        this.stack.setDurability(durability);
+        return this;
+    }
+
+    public ItemBuilder setDurability(int durability) {
+        return this.setDurability(durability);
+    }
+
+    public ItemBuilder hideAttributes() {
+        return addItemFlag(ItemFlag.HIDE_ATTRIBUTES);
+    }
+
+    public ItemBuilder hideEnchants() {
+        return addItemFlag(ItemFlag.HIDE_ENCHANTS);
+    }
+
+    public ItemBuilder stripLore() {
+        return setLore(new ArrayList<>());
+    }
+
+    public ItemBuilder setAmount(int amount) {
+        stack.setAmount(amount);
+        return this;
     }
 
     public ItemBuilder setDisplayName(String displayName) {
@@ -52,26 +90,16 @@ public class ItemBuilder {
         return setLore(Arrays.asList(lore));
     }
 
-    public ItemBuilder setAmount(int amount) {
-        stack.setAmount(amount);
+    public ItemBuilder addEnchant(Enchantment enchantment, int i, boolean b) {
+        ItemMeta meta = stack.getItemMeta();
+        meta.addEnchant(enchantment, i, b);
+        stack.setItemMeta(meta);
         return this;
     }
 
     public ItemBuilder setLore(List<String> lore) {
         ItemMeta meta = stack.getItemMeta();
         meta.setLore(lore);
-        stack.setItemMeta(meta);
-        return this;
-    }
-
-    @Deprecated
-    public ItemBuilder addEnchant(Enchantment enchantment, int i) {
-        return addEnchant(enchantment, i, true);
-    }
-
-    public ItemBuilder addEnchant(Enchantment enchantment, int i, boolean b) {
-        ItemMeta meta = stack.getItemMeta();
-        meta.addEnchant(enchantment, i, b);
         stack.setItemMeta(meta);
         return this;
     }
@@ -148,6 +176,16 @@ public class ItemBuilder {
 
     public ItemBuilder clone() {
         return new ItemBuilder(stack.clone());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ItemBuilder) {
+            ItemBuilder builder = (ItemBuilder) obj;
+            return stack.equals(builder.stack);
+        } else {
+            return stack.equals(obj);
+        }
     }
 
 }

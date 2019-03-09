@@ -115,7 +115,12 @@ public enum Boots implements SpigotBuyable {
     }
 
     @Override
-    public void hasBought(Player player, Consumer consumer) {
+    public void hasBought(Player player, Consumer<Boolean> consumer) {
+        if (player.hasPermission("lobby.boots." + name().toLowerCase())) {
+            consumer.accept(true);
+            return;
+        }
+
         Lobby.getInstance().getBootsTable().hasBoots(player.getUniqueId(), toString(), consumer);
     }
 

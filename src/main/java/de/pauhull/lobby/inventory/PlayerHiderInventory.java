@@ -29,12 +29,12 @@ public class PlayerHiderInventory implements Listener {
 
     private static final String TITLE = "§cSpieler verstecken";
     private static final List<String> SELECTED_LORE = Arrays.asList(" ", "§a§oAktiv", " ");
-    private static final ItemStack PLAYERS = new ItemBuilder(Material.STAINED_CLAY, (short) 5).setDisplayName("§8» §a§lAlle Spieler anzeigen").build();
-    private static final ItemStack PLAYERS_SELECTED = new ItemBuilder(Material.STAINED_CLAY, (short) 5).setDisplayName("§8» §a§lAlle Spieler anzeigen").addEnchant(Enchantment.DURABILITY, 1).addItemFlag(ItemFlag.HIDE_ENCHANTS).setLore(SELECTED_LORE).build();
-    private static final ItemStack TEAM = new ItemBuilder(Material.STAINED_CLAY, (short) 10).setDisplayName("§8» §5§lNur Freunde, VIPs und Teammitglieder anzeigen").build();
-    private static final ItemStack TEAM_SELECTED = new ItemBuilder(Material.STAINED_CLAY, (short) 10).setDisplayName("§8» §5§lNur Freunde, VIPs und Teammitglieder anzeigen").addEnchant(Enchantment.DURABILITY, 1).addItemFlag(ItemFlag.HIDE_ENCHANTS).setLore(SELECTED_LORE).build();
-    private static final ItemStack NONE = new ItemBuilder(Material.STAINED_CLAY, (short) 14).setDisplayName("§8» §c§lAlle Spieler verstecken").build();
-    private static final ItemStack NONE_SELECTED = new ItemBuilder(Material.STAINED_CLAY, (short) 14).setDisplayName("§8» §5§lAlle Spieler verstecken").addEnchant(Enchantment.DURABILITY, 1).addItemFlag(ItemFlag.HIDE_ENCHANTS).setLore(SELECTED_LORE).build();
+    private static final ItemStack PLAYERS = new ItemBuilder(Material.STAINED_CLAY, 1, 5).setDisplayName("§8» §a§lAlle Spieler anzeigen").build();
+    private static final ItemStack PLAYERS_SELECTED = new ItemBuilder(Material.STAINED_CLAY, 1, 5).setDisplayName("§8» §a§lAlle Spieler anzeigen").addEnchant(Enchantment.DURABILITY, 1, true).addItemFlag(ItemFlag.HIDE_ENCHANTS).setLore(SELECTED_LORE).build();
+    private static final ItemStack TEAM = new ItemBuilder(Material.STAINED_CLAY, 1, 10).setDisplayName("§8» §5§lNur Freunde, VIPs und Teammitglieder anzeigen").build();
+    private static final ItemStack TEAM_SELECTED = new ItemBuilder(Material.STAINED_CLAY, 1, 10).setDisplayName("§8» §5§lNur Freunde, VIPs und Teammitglieder anzeigen").addEnchant(Enchantment.DURABILITY, 1, true).addItemFlag(ItemFlag.HIDE_ENCHANTS).setLore(SELECTED_LORE).build();
+    private static final ItemStack NONE = new ItemBuilder(Material.STAINED_CLAY, 1, 14).setDisplayName("§8» §c§lAlle Spieler verstecken").build();
+    private static final ItemStack NONE_SELECTED = new ItemBuilder(Material.STAINED_CLAY, 1, 14).setDisplayName("§8» §5§lAlle Spieler verstecken").addEnchant(Enchantment.DURABILITY, 1, true).addItemFlag(ItemFlag.HIDE_ENCHANTS).setLore(SELECTED_LORE).build();
 
     private Lobby lobby;
     private Map<String, HideMode> hideModes;

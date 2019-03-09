@@ -1,5 +1,6 @@
 package de.pauhull.lobby.entity;
 
+import de.pauhull.lobby.shop.Balloon;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,8 +27,8 @@ public class EntityBalloonBlock extends EntityBalloon {
     @Getter
     private byte data;
 
-    public EntityBalloonBlock(Location location, Player player, Material material, byte data, String displayName) {
-        super(location, player);
+    public EntityBalloonBlock(Balloon balloon, Location location, Player player, Material material, byte data, String displayName) {
+        super(balloon, location, player);
         this.material = material;
         this.data = data;
         this.displayName = displayName;

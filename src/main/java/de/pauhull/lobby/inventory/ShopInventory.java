@@ -19,8 +19,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class ShopInventory implements Listener {
 
     private static final String TITLE = "§cShop";
-    private static final ItemStack BLACK_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 15).setDisplayName(" ").build();
-    private static final ItemStack WHITE_GLASS = new ItemBuilder(Material.STAINED_GLASS_PANE).setDisplayName(" ").build();
     private static final ItemStack BOOTS = new ItemBuilder(Material.IRON_BOOTS).setDisplayName("§8» §eSchuhe").build();
     private static final ItemStack BALLOONS = new ItemBuilder(Material.LEASH).setDisplayName("§8» §eBallons").build();
 

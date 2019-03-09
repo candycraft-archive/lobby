@@ -1,6 +1,7 @@
 package de.pauhull.lobby.entity;
 
 import de.pauhull.lobby.Lobby;
+import de.pauhull.lobby.shop.Balloon;
 import de.pauhull.lobby.util.Util;
 import lombok.Getter;
 import net.minecraft.server.v1_8_R3.EntityBat;
@@ -42,9 +43,13 @@ public abstract class EntityBalloon {
     protected Bat bat;
 
     @Getter
+    protected Balloon balloon;
+
+    @Getter
     protected boolean alive = true;
 
-    protected EntityBalloon(Location location, Player player) {
+    protected EntityBalloon(Balloon balloon, Location location, Player player) {
+        this.balloon = balloon;
         this.location = location;
         this.player = player;
     }

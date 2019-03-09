@@ -5,15 +5,15 @@ import de.pauhull.lobby.command.BuildCommand;
 import de.pauhull.lobby.shop.Balloon;
 import de.pauhull.lobby.util.Title;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 public class PlayerJoinListener implements Listener {
 
@@ -26,7 +26,7 @@ public class PlayerJoinListener implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) throws ParseException {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
         if (player.isOp()) {
@@ -39,9 +39,45 @@ public class PlayerJoinListener implements Listener {
         Title.sendTitle(player, "§eWillkommen:", "§8➜ §c" + player.getDisplayName(), 20, 60, 40);
         player.playSound(player.getLocation(), Sound.FIREWORK_LAUNCH, 1, 1);
 
-        lobby.teleportToSpawn(player);
+        Location locationInAir = player.getLocation().clone();
+        locationInAir.setY(5000);
+        player.teleport(locationInAir);
+        lobby.getLastLocationTable().getLocation(player.getUniqueId(), location -> {
+            Bukkit.getScheduler().runTask(lobby, () -> {
+                lobby.teleportToSpawn(player, location);
+            });
+        });
 
+        lobby.getSelectedGadgetsTable().getSelectedGadget(player.getUniqueId(), "BALLOON", balloonString -> {
+            if (balloonString == null) {
+                return;
+            }
 
+            Bukkit.getScheduler().runTask(lobby, () -> {
+                String[] splitted = balloonString.split("/");
+                for (String string : splitted) {
+                    Balloon balloon = Balloon.valueOf(string);
+                    lobby.getBalloonManager().addBalloon(player, balloon);
+                }
+            });
+        });
+
+        lobby.getSelectedGadgetsTable().getSelectedGadget(player.getUniqueId(), "SKULL", owner -> {
+            if (owner == null) {
+                return;
+            }
+
+            Bukkit.getScheduler().runTask(lobby, () -> {
+                ItemStack stack = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+                SkullMeta meta = (SkullMeta) stack.getItemMeta();
+                meta.setOwner(owner);
+                meta.setDisplayName("§8» §e" + owner);
+                stack.setItemMeta(meta);
+                player.getInventory().setHelmet(stack);
+            });
+        });
+
+        /*
         Date start = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2019-02-17 08:00:00");
         Date end = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2019-03-01 12:00:00");
         Date now = new Date();
@@ -60,6 +96,7 @@ public class PlayerJoinListener implements Listener {
                 }
             });
         }
+        */
     }
 
 }

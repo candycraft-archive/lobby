@@ -27,7 +27,7 @@ public class SpawnCommand implements CommandExecutor {
         if (BuildCommand.getBuilding().contains(player.getName())) {
             lobby.getLocationManager().teleport(player, "Spawn");
         } else {
-            lobby.teleportToSpawn(player);
+            lobby.teleportToSpawn(player, null);
         }
 
         return true;

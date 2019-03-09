@@ -1,6 +1,7 @@
 package de.pauhull.lobby.entity;
 
 import de.pauhull.lobby.Lobby;
+import de.pauhull.lobby.shop.Balloon;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
@@ -25,8 +26,8 @@ public class EntityBalloonSkull extends EntityBalloon {
     @Getter
     private String displayName;
 
-    public EntityBalloonSkull(Location location, Player player, String owner, String displayName) {
-        super(location, player);
+    public EntityBalloonSkull(Balloon balloon, Location location, Player player, String owner, String displayName) {
+        super(balloon, location, player);
         this.owner = owner;
         this.displayName = displayName;
     }

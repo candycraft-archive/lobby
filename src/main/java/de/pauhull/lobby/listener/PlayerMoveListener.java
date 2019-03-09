@@ -26,7 +26,7 @@ public class PlayerMoveListener implements Listener {
         Player player = event.getPlayer();
 
         if (player.getLocation().getY() < 0) {
-            lobby.teleportToSpawn(player);
+            lobby.teleportToSpawn(player, null);
             return;
         }
 

@@ -51,7 +51,6 @@ public enum Balloon implements SpigotBuyable {
     BETA("beta", "§8» §6Beta Geschenk", -1, "StackedGold"),
     STYLEX("stylex", "§8» §6leStylex", -1, "leStylex");
 
-
     @Getter
     private boolean premium = false;
 
@@ -105,14 +104,14 @@ public enum Balloon implements SpigotBuyable {
     public ItemStack getItem() {
         if (owner == null) {
             if (premium) {
-                return new ItemBuilder(material, (short) data).setDisplayName(name)
+                return new ItemBuilder(material, 1, data).setDisplayName(name)
                         .setLore(Arrays.asList(" ", "§e§lLEBKUCHEN FEATURE", " ")).build();
             } else if (special) {
-                return new ItemBuilder(material, (short) data).setDisplayName(name)
+                return new ItemBuilder(material, 1, data).setDisplayName(name)
                         .setLore(Arrays.asList(" ", "§6§lSPEZIALITEM", " ")).build();
             } else {
                 String number = NumberFormat.getInstance(Locale.GERMAN).format(cost);
-                return new ItemBuilder(material, (short) data).setDisplayName(name)
+                return new ItemBuilder(material, 1, data).setDisplayName(name)
                         .setLore(Arrays.asList(" ", "§eKosten §8» §7" + number, " ")).build();
             }
         } else {
@@ -175,15 +174,20 @@ public enum Balloon implements SpigotBuyable {
     }
 
     @Override
-    public void hasBought(Player player, Consumer consumer) {
+    public void hasBought(Player player, Consumer<Boolean> consumer) {
+        if (player.hasPermission("lobby.balloon." + name().toLowerCase())) {
+            consumer.accept(true);
+            return;
+        }
+
         Lobby.getInstance().getBalloonTable().hasBalloon(player.getUniqueId(), toString(), consumer);
     }
 
     public EntityBalloon getEntity(Player player) {
         if (owner == null) {
-            return new EntityBalloonBlock(player.getLocation().clone().add(0, 2, 0), player, material, data, name);
+            return new EntityBalloonBlock(this, player.getLocation().clone().add(0, 2, 0), player, material, data, name);
         } else {
-            return new EntityBalloonSkull(player.getLocation().clone().add(0, 2, 0), player, owner, name);
+            return new EntityBalloonSkull(this, player.getLocation().clone().add(0, 2, 0), player, owner, name);
         }
     }
 

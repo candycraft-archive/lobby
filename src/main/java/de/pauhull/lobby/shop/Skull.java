@@ -136,7 +136,12 @@ public class Skull implements SpigotBuyable {
     }
 
     @Override
-    public void hasBought(Player player, Consumer consumer) {
+    public void hasBought(Player player, Consumer<Boolean> consumer) {
+        if (player.hasPermission("lobby.skull." + owner.toLowerCase())) {
+            consumer.accept(true);
+            return;
+        }
+
         Lobby.getInstance().getSkullsTable().hasSkull(player.getUniqueId(), toString(), consumer);
     }
 

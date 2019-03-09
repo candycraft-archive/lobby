@@ -11,12 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -29,8 +28,8 @@ public class BootsInventory implements Listener {
     private static final ItemStack REMOVE = new ItemBuilder(Material.BARRIER).setDisplayName("§8» §cSchuhe entfernen").build();
     private static final ItemStack BACK = new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 14).setDisplayName("§8» §cZurück").build();
 
-    private Lobby lobby;
     private Map<String, Boots> boots;
+    private Lobby lobby;
 
     public BootsInventory(Lobby lobby) {
         this.lobby = lobby;
@@ -108,10 +107,7 @@ public class BootsInventory implements Listener {
                     } else if (stack.equals(boots.getItemBought())) {
                         player.closeInventory();
                         player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
-                        ItemStack bootsStack = boots.getItem().clone();
-                        ItemMeta meta = bootsStack.getItemMeta();
-                        meta.setLore(new ArrayList<>());
-                        bootsStack.setItemMeta(meta);
+                        ItemStack bootsStack = new ItemBuilder(boots.getItem()).stripLore().build();
                         player.getInventory().setBoots(bootsStack);
                         this.boots.put(player.getName(), boots);
                         break;
@@ -125,7 +121,27 @@ public class BootsInventory implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         player.getInventory().setBoots(null);
-        boots.remove(player.getName());
+        Boots boots = this.boots.get(player.getName());
+        lobby.getSelectedGadgetsTable().saveSelectedGadget(player.getUniqueId(), "BOOTS", boots == null ? null : boots.name());
+        this.boots.remove(player.getName());
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        lobby.getSelectedGadgetsTable().getSelectedGadget(player.getUniqueId(), "BOOTS", bootsName -> {
+            if (bootsName == null) {
+                return;
+            }
+
+            Boots boots = Boots.valueOf(bootsName);
+
+            Bukkit.getScheduler().runTask(lobby, () -> {
+                ItemStack bootsStack = new ItemBuilder(boots.getItem()).stripLore().build();
+                player.getInventory().setBoots(bootsStack);
+                this.boots.put(player.getName(), boots);
+            });
+        });
     }
 
     private void playEffects() {

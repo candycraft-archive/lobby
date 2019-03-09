@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -99,6 +100,10 @@ public class Lobby extends JavaPlugin {
     private SkullsTable skullsTable;
     @Getter
     private BalloonTable balloonTable;
+    @Getter
+    private SelectedGadgetsTable selectedGadgetsTable;
+    @Getter
+    private LastLocationTable lastLocationTable;
 
     @Setter
     @Getter
@@ -168,6 +173,8 @@ public class Lobby extends JavaPlugin {
         this.playerHiderTable = new PlayerHiderTable(mySQL, executorService);
         this.privacyPolicyTable = new PrivacyPolicyTable(mySQL, executorService);
         this.balloonTable = new BalloonTable(mySQL, executorService);
+        this.selectedGadgetsTable = new SelectedGadgetsTable(mySQL, executorService);
+        this.lastLocationTable = new LastLocationTable(mySQL, executorService);
 
         /* COMMANDS */
         new BuildCommand(this);
@@ -202,7 +209,7 @@ public class Lobby extends JavaPlugin {
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
     }
 
-    public void teleportToSpawn(Player player) {
+    public void teleportToSpawn(Player player, Location location) {
         if (BuildCommand.getBuilding().contains(player.getName())) {
             BuildCommand.getBuilding().remove(player.getName());
             player.sendMessage(Messages.PREFIX + "§7Du hast den Buildmodus §cverlassen§7!");
@@ -221,7 +228,11 @@ public class Lobby extends JavaPlugin {
             lobbyItems.giveItems(player);
         }
 
-        locationManager.teleport(player, "Spawn");
+        if (location == null) {
+            locationManager.teleport(player, "Spawn");
+        } else {
+            player.teleport(location);
+        }
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             player.setAllowFlight(true);
