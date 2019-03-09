@@ -64,7 +64,7 @@ public class BootsInventory implements Listener {
     }
 
     private void placeInInventory(Player player, Inventory inventory, int slot, Boots boots) {
-        lobby.getBootsTable().hasBoots(player.getUniqueId(), boots.toString(), hasBoots -> {
+        boots.hasBought(player, hasBoots -> {
             if (hasBoots) {
                 inventory.setItem(slot, boots.getItemBought());
             } else {

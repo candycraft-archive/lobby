@@ -53,7 +53,7 @@ public class BalloonsInventory implements Listener {
         for (int i = 0; i < Balloon.values().length; i++) {
             Balloon balloon = Balloon.values()[i];
 
-            lobby.getBalloonTable().hasBalloon(player.getUniqueId(), balloon.toString(), hasBalloon -> {
+            balloon.hasBought(player, hasBalloon -> {
 
                 if (balloon.isSpecial() && !hasBalloon) {
                     return;
