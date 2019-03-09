@@ -120,7 +120,9 @@ public class PlayerHiderInventory implements Listener {
         Player player = event.getPlayer();
 
         lobby.getPlayerHiderTable().getMode(player.getUniqueId(), mode -> {
-            selectMode(player, mode);
+            Bukkit.getScheduler().runTask(lobby, () -> {
+                selectMode(player, mode);
+            });
         });
 
         for (Player all : Bukkit.getOnlinePlayers()) {
