@@ -5,7 +5,6 @@ import de.pauhull.lobby.command.BuildCommand;
 import de.pauhull.lobby.shop.Balloon;
 import de.pauhull.lobby.util.Title;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -39,9 +38,6 @@ public class PlayerJoinListener implements Listener {
         Title.sendTitle(player, "§eWillkommen:", "§8➜ §c" + player.getDisplayName(), 20, 60, 40);
         player.playSound(player.getLocation(), Sound.FIREWORK_LAUNCH, 1, 1);
 
-        Location locationInAir = player.getLocation().clone();
-        locationInAir.setY(5000);
-        player.teleport(locationInAir);
         lobby.getLastLocationTable().getLocation(player.getUniqueId(), location -> {
             Bukkit.getScheduler().runTask(lobby, () -> {
                 lobby.teleportToSpawn(player, location);
