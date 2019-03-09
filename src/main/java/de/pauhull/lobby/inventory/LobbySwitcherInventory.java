@@ -43,6 +43,11 @@ public class LobbySwitcherInventory implements Listener {
 
         Inventory inventory = Bukkit.createInventory(null, (int) (Math.ceil((double) servers.size() / 9.0) * 9), TITLE);
 
+        if (servers.size() > 1) {
+            // so that location is loaded when lobby is switched
+            lobby.getLastLocationTable().saveLocation(player.getUniqueId(), player.getLocation());
+        }
+
         int index = 0;
         for (ServerObject server : servers) {
             Material material;

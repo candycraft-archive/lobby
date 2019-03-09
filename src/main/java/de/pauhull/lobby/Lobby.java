@@ -88,6 +88,8 @@ public class Lobby extends JavaPlugin {
     private BalloonsInventory balloonsInventory;
     @Getter
     private LoadingInventory loadingInventory;
+    @Getter
+    private PlayerMenuInventory playerMenuInventory;
 
     /* TABLES */
     @Getter
@@ -165,6 +167,7 @@ public class Lobby extends JavaPlugin {
         this.nickInventory = new NickInventory(this);
         this.loadingInventory = new LoadingInventory(this);
         this.balloonsInventory = new BalloonsInventory(this);
+        this.playerMenuInventory = new PlayerMenuInventory(this);
 
         /* MYSQL TABLES */
         this.skullsTable = new SkullsTable(mySQL, executorService);

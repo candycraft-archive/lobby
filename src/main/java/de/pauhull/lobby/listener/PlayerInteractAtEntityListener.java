@@ -47,11 +47,16 @@ public class PlayerInteractAtEntityListener implements Listener {
 
         } else if (event.getRightClicked().getType() == EntityType.VILLAGER) {
             Villager clicked = (Villager) event.getRightClicked();
+
             if (clicked.getCustomName().equals("§9§lPaint§f§lWars")) {
                 lobby.getServerInventory().show(player, "PaintWars");
             } else if (clicked.getCustomName().equals("§a§lBed§b§lWars")) {
                 lobby.getServerInventory().show(player, "BedWars");
             }
+
+        } else if (event.getRightClicked().getType() == EntityType.PLAYER) {
+            Player clicked = (Player) event.getRightClicked();
+            lobby.getPlayerMenuInventory().show(player, clicked);
         }
     }
 }
