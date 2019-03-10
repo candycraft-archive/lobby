@@ -23,7 +23,7 @@
 
         <dependency>
             <groupId>de.pauhull</groupId>
-            <artifactId>scoreboard</artifactId>
+            <artifactId>scoreboard-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

@@ -2,16 +2,18 @@ package de.pauhull.lobby.display;
 
 import cloud.timo.TimoCloud.api.TimoCloudAPI;
 import de.pauhull.coins.api.CoinAPI;
-import de.pauhull.scoreboard.NovusScoreboard;
+import de.pauhull.lobby.Lobby;
+import de.pauhull.scoreboard.CustomScoreboard;
 import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionGroup;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
-public class LobbyScoreboard extends NovusScoreboard {
+public class LobbyScoreboard extends CustomScoreboard {
 
-    private NovusScore rank, coins;
+    private DisplayScore rank, coins, onlineTime;
 
     public LobbyScoreboard(Player player) {
         super(player, player.getName(), "§d§lCandyCraft");
@@ -21,18 +23,21 @@ public class LobbyScoreboard extends NovusScoreboard {
     @Override
     public void show() {
 
-        this.coins = new NovusScore("§d Lädt...");
-        new NovusScore("Coins:");
-        new NovusScore();
-        new NovusScore("§c CandyCraft.de");
-        new NovusScore("TeamSpeak:");
-        new NovusScore();
-        this.rank = new NovusScore("§b Lädt...");
-        new NovusScore("Rang:");
-        new NovusScore();
-        new NovusScore("§a " + TimoCloudAPI.getBukkitAPI().getThisServer().getName().replace('-', ' '));
-        new NovusScore("Server:");
-        new NovusScore();
+        this.onlineTime = new DisplayScore("§e Lädt...");
+        new DisplayScore("Onlinezeit:");
+        new DisplayScore();
+        this.coins = new DisplayScore("§d Lädt...");
+        new DisplayScore("Coins:");
+        new DisplayScore();
+        new DisplayScore("§c CandyCraft.de");
+        new DisplayScore("TeamSpeak:");
+        new DisplayScore();
+        this.rank = new DisplayScore("§b Lädt...");
+        new DisplayScore("Rang:");
+        new DisplayScore();
+        new DisplayScore("§a " + TimoCloudAPI.getBukkitAPI().getThisServer().getName().replace('-', ' '));
+        new DisplayScore("Server:");
+        new DisplayScore();
 
         super.show();
     }
@@ -51,6 +56,13 @@ public class LobbyScoreboard extends NovusScoreboard {
                 this.coins.setName(coinsScore);
             }
         });
+
+        if (this.onlineTime.getScore().getEntry().contains("Lädt")) {
+            Lobby.getInstance().getPlaytimeTable().getTime(player.getUniqueId(), onlineTime -> {
+                int hours = (int) Math.floor(onlineTime / (double) TimeUnit.HOURS.toMillis(1));
+                this.onlineTime.setName("§e " + hours + "h");
+            });
+        }
     }
 
     private String getPlayerGroup(Player player) {

@@ -13,7 +13,7 @@ import de.pauhull.lobby.manager.LobbyLocationManager;
 import de.pauhull.lobby.util.ActionBar;
 import de.pauhull.lobby.util.HeadCache;
 import de.pauhull.lobby.util.LobbyItems;
-import de.pauhull.scoreboard.NovusScoreboardManager;
+import de.pauhull.scoreboard.ScoreboardManager;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -59,7 +59,7 @@ public class Lobby extends JavaPlugin {
     @Getter
     private BalloonManager balloonManager;
     @Getter
-    private NovusScoreboardManager scoreboardManager;
+    private ScoreboardManager scoreboardManager;
 
     /* INVENTORIES */
     @Getter
@@ -106,6 +106,8 @@ public class Lobby extends JavaPlugin {
     private SelectedGadgetsTable selectedGadgetsTable;
     @Getter
     private LastLocationTable lastLocationTable;
+    @Getter
+    private PlaytimeTable playtimeTable;
 
     @Setter
     @Getter
@@ -149,7 +151,7 @@ public class Lobby extends JavaPlugin {
         /* MISC */
         this.balloonManager = new BalloonManager();
         this.locationManager = new LobbyLocationManager(this);
-        this.scoreboardManager = new NovusScoreboardManager(this, LobbyScoreboard.class);
+        this.scoreboardManager = new ScoreboardManager(this, LobbyScoreboard.class);
         this.lobbyItems = new LobbyItems();
         this.headCache = new HeadCache();
 
@@ -177,6 +179,7 @@ public class Lobby extends JavaPlugin {
         this.balloonTable = new BalloonTable(mySQL, executorService);
         this.selectedGadgetsTable = new SelectedGadgetsTable(mySQL, executorService);
         this.lastLocationTable = new LastLocationTable(mySQL, executorService);
+        this.playtimeTable = new PlaytimeTable(mySQL, executorService);
 
         /* COMMANDS */
         new BuildCommand(this);
