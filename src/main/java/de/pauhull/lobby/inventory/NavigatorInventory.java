@@ -23,16 +23,18 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NavigatorInventory implements Listener {
 
     private static final String TITLE = "§cNavigator";
-    private static final Map<Inventory, Integer> ANIMATION_STEPS = new HashMap<>();
+    private static final Map<Inventory, AtomicInteger> ANIMATION_STEPS = new HashMap<>();
     private static final ItemStack BEDWARS = new ItemBuilder(Material.BED).setDisplayName("§6§lBed§c§lWars").build();
     private static final ItemStack PAINT_WARS = new ItemBuilder(Material.WOOL).setDisplayName("§4§lP§c§la§6§li§e§ln§2§lt§a§lW§b§la§3§lr§9§ls").build();
     private static final ItemStack SPAWN = new ItemBuilder(Material.MAGMA_CREAM).setDisplayName("§f§lSpawn").build();
@@ -43,6 +45,7 @@ public class NavigatorInventory implements Listener {
     private Lobby lobby;
     private short[] availableColors = new short[]{1, 2, 3, 4, 5, 6, 9, 10, 11, 14};
     private char[] chatColors = new char[]{'4', 'c', '6', 'e', '2', 'a', 'b', '3', /*'1' too dark, */'9', 'd', '5'};
+    private long end;
 
     public NavigatorInventory(Lobby lobby) {
         this.lobby = lobby;
@@ -52,6 +55,12 @@ public class NavigatorInventory implements Listener {
 
         CANDY_CANE = new ItemBuilder(Skull.getFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGNjM2Y3ODFjOTIzYTI4ODdmMTRjMWVlYTExMDUwMTY2OTY2ZjI2MDI1Nzg0MDFmMTQ1MWU2MDk3Yjk3OWRmIn19fQ==")).setDisplayName("§f§lCandy§c§lCane §8§l(§d§l1.8§7 - §d§l1.12§8§l)").build();
         GINGERBREAD = new ItemBuilder(Skull.getFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTQ0MjJhODJjODk5YTljMTQ1NDM4NGQzMmNjNTRjNGFlN2ExYzRkNzI0MzBlNmU0NDZkNTNiOGIzODVlMzMwIn19fQ==")).setDisplayName("§6§lGingerbread §8§l(§d§l1.13§8§l)").build();
+
+        try {
+            end = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse("2019-03-16 15:00:00").getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public void show(Player player) {
@@ -74,7 +83,7 @@ public class NavigatorInventory implements Listener {
         inventory.setItem(22, GINGERBREAD);
         inventory.setItem(4, CANDY_CANE);
 
-        ANIMATION_STEPS.put(inventory, 0);
+        ANIMATION_STEPS.put(inventory, new AtomicInteger(-1));
         final AtomicInteger task = new AtomicInteger();
         task.set(Bukkit.getScheduler().scheduleSyncRepeatingTask(lobby, () -> {
             if (inventory.getViewers().isEmpty() || !ANIMATION_STEPS.containsKey(inventory)) {
@@ -83,19 +92,12 @@ public class NavigatorInventory implements Listener {
                 return;
             }
 
-            final AtomicInteger currentTick = new AtomicInteger();
-            ANIMATION_STEPS.compute(inventory, (ignored, lastTick) -> {
-                currentTick.set(Objects.requireNonNull(lastTick) + 1);
-                return currentTick.get();
-            });
-
-            animate(inventory, currentTick.get());
+            animate(inventory, ANIMATION_STEPS.get(inventory).getAndIncrement());
 
         }, 0, 1));
 
         player.playSound(player.getLocation(), Sound.ITEM_PICKUP, 1, 1);
         player.openInventory(inventory);
-        animate(inventory, -1);
     }
 
     public void animate(Inventory inventory, int tick) {
@@ -126,7 +128,58 @@ public class NavigatorInventory implements Listener {
             builder = new ItemBuilder(GINGERBREAD);
             server = TimoCloudAPI.getUniversalAPI().getServer("Gingerbread");
             if (server != null) {
-                builder.setLore("§7Spieler: §a" + server.getOnlinePlayerCount() + "§7/§a" + server.getMaxPlayerCount());
+                long time = end - System.currentTimeMillis();
+
+                if (time < 0) {
+                    builder.setLore("§7Spieler: §a" + server.getOnlinePlayerCount() + "§7/§a" + server.getMaxPlayerCount());
+                } else {
+                    int days = (int) Math.floor(time / (double) TimeUnit.DAYS.toMillis(1));
+                    time %= TimeUnit.DAYS.toMillis(1);
+                    int hours = (int) Math.floor(time / (double) TimeUnit.HOURS.toMillis(1));
+                    time %= TimeUnit.HOURS.toMillis(1);
+                    int minutes = (int) Math.floor(time / (double) TimeUnit.MINUTES.toMillis(1));
+                    time %= TimeUnit.MINUTES.toMillis(1);
+                    int seconds = (int) Math.floor(time / (double) TimeUnit.SECONDS.toMillis(1));
+                    StringBuilder sb = new StringBuilder("§b§lNoch ");
+                    builder.setLore(" ");
+                    if (days > 0) {
+                        sb.append(days)
+                                .append(" Tag")
+                                .append(days > 1 ? "e" : "")
+                                .append(hours != 0 ? ", " : "");
+                    }
+                    if (sb.length() > 25) {
+                        builder.addLore(sb.toString());
+                        sb = new StringBuilder("§b§l");
+                    }
+                    if (hours > 0) {
+                        sb.append(hours)
+                                .append(" Stunde")
+                                .append(hours > 1 ? "n" : "")
+                                .append(minutes != 0 ? ", " : "");
+                    }
+                    if (sb.length() > 25) {
+                        builder.addLore(sb.toString());
+                        sb = new StringBuilder("§b§l");
+                    }
+                    if (minutes > 0) {
+                        sb.append(minutes)
+                                .append(" Minute")
+                                .append(minutes > 1 ? "n" : "")
+                                .append(seconds != 0 ? ", " : "");
+                    }
+                    if (sb.length() > 25) {
+                        builder.addLore(sb.toString());
+                        sb = new StringBuilder("§b§l");
+                    }
+                    if (seconds > 0) {
+                        sb.append(seconds)
+                                .append(" Sekunde")
+                                .append(seconds > 1 ? "n" : "");
+                    }
+                    builder.addLore(sb.toString(), "§b§lbis zum Release", " ");
+                }
+
             } else {
                 builder.setLore("§c§lOffline");
             }
@@ -178,6 +231,10 @@ public class NavigatorInventory implements Listener {
             if (getVersion(player) <= 47) {
                 player.updateInventory();
             }
+        }
+
+        if (tick == -1) {
+            player.updateInventory();
         }
     }
 

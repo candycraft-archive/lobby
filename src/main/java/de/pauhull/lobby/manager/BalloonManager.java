@@ -77,11 +77,14 @@ public class BalloonManager {
     public void removeAllInactiveBalloons() {
         for (World world : Bukkit.getWorlds()) {
             for (Bat bat : world.getEntitiesByClass(Bat.class)) {
+                if (bat.getLeashHolder() != null) {
+                    continue;
+                }
+
                 if (bat.getPassenger() != null) {
                     bat.getPassenger().remove();
                 }
 
-                bat.setLeashHolder(null);
                 bat.remove();
             }
         }

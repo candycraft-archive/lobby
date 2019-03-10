@@ -46,6 +46,7 @@ public enum Balloon implements SpigotBuyable {
     CREEPER("creeper", "§8» §eCreeper", 8000, "Mrman"),
     DUCK("duck", "§8» §eEnte", 4500, "Hacking"),
     PAUHULL("pauhull", "§8» §epauhull", 0, "pauhull"),
+    CODE_EXCEPTION("codeexception", "§8» §eCodeException", 0, "CodeException"),
     UGANDAN_KNUCKLE("uganda", "§8» §eUgandan Knuckle", 0, "deadmeme_"),
     FANCY_CUBE("cube", "§8» §eFancy Cube", 0, "Pesse_"),
     BETA("beta", "§8» §6Beta Geschenk", -1, "StackedGold"),

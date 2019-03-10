@@ -209,6 +209,10 @@ public class Lobby extends JavaPlugin {
         }
 
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            balloonManager.removeAllInactiveBalloons();
+        }, 20, 20);
     }
 
     public void teleportToSpawn(Player player, Location location) {

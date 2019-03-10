@@ -74,6 +74,12 @@ public class ItemBuilder {
         return setLore(new ArrayList<>());
     }
 
+    public ItemBuilder addLore(String... lore) {
+        List<String> oldLore = new ArrayList<>(stack.getItemMeta().getLore());
+        oldLore.addAll(Arrays.asList(lore));
+        return setLore(oldLore);
+    }
+
     public ItemBuilder setAmount(int amount) {
         stack.setAmount(amount);
         return this;
