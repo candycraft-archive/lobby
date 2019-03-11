@@ -60,6 +60,7 @@ public class BuildCommand implements CommandExecutor {
                     player.getInventory().clear();
                     player.sendMessage(Messages.PREFIX + "§7Du hast den Buildmodus §abetreten§7!");
                     player.setGameMode(GameMode.CREATIVE);
+                    lobby.getBalloonManager().removeAllBalloons(player);
                 }
 
             } else if (args.length == 1) {
@@ -74,6 +75,7 @@ public class BuildCommand implements CommandExecutor {
                         buildingPlayer.sendMessage(Messages.PREFIX + "§7Der Spieler §e" + player.getName() + " §7hat dich aus dem Buildmodus §centfernt§7!");
                         buildingPlayer.getInventory().clear();
                         buildingPlayer.setGameMode(GameMode.ADVENTURE);
+                        lobby.getBalloonManager().removeAllBalloons(buildingPlayer);
 
                         if (!buildingPlayer.hasPermission("Lobby.team")) {
                             lobby.getLobbyItems().giveItems(buildingPlayer);

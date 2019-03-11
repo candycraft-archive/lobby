@@ -19,8 +19,10 @@ import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Bat;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -205,17 +207,21 @@ public class Lobby extends JavaPlugin {
         this.sendActionBar();
         EntityBalloon.schedule();
 
-        balloonManager.removeAllInactiveBalloons();
-
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.setAllowFlight(true);
         }
 
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            balloonManager.removeAllInactiveBalloons();
-        }, 20, 20);
+        for (World world : Bukkit.getWorlds()) {
+            for (Bat bat : world.getEntitiesByClass(Bat.class)) {
+                if (bat.getPassenger() != null) {
+                    bat.getPassenger().remove();
+                }
+
+                bat.remove();
+            }
+        }
     }
 
     public void teleportToSpawn(Player player, Location location) {
@@ -231,7 +237,7 @@ public class Lobby extends JavaPlugin {
         player.setExp(0);
         player.setLevel(0);
 
-        if (player.hasPermission("lobby.team")) {
+        if (player.hasPermission("nickapi.nick")) {
             lobbyItems.giveTeamItems(player);
         } else {
             lobbyItems.giveItems(player);

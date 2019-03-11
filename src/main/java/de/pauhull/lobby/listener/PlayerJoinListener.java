@@ -2,7 +2,6 @@ package de.pauhull.lobby.listener;
 
 import de.pauhull.lobby.Lobby;
 import de.pauhull.lobby.command.BuildCommand;
-import de.pauhull.lobby.shop.Balloon;
 import de.pauhull.lobby.util.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -41,20 +40,6 @@ public class PlayerJoinListener implements Listener {
         lobby.getLastLocationTable().getLocation(player.getUniqueId(), location -> {
             Bukkit.getScheduler().runTask(lobby, () -> {
                 lobby.teleportToSpawn(player, location);
-            });
-        });
-
-        lobby.getSelectedGadgetsTable().getSelectedGadget(player.getUniqueId(), "BALLOON", balloonString -> {
-            if (balloonString == null) {
-                return;
-            }
-
-            Bukkit.getScheduler().runTask(lobby, () -> {
-                String[] splitted = balloonString.split("/");
-                for (String string : splitted) {
-                    Balloon balloon = Balloon.valueOf(string);
-                    lobby.getBalloonManager().addBalloon(player, balloon);
-                }
             });
         });
 

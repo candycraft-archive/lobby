@@ -45,7 +45,6 @@ public class PlayerQuitListener implements Listener {
 
         lobby.getBalloonManager().removeAllBalloons(player);
         lobby.getLastLocationTable().saveLocation(player.getUniqueId(), player.getLocation());
-        lobby.getSelectedGadgetsTable().saveSelectedGadget(player.getUniqueId(), "BALLOON", builder.length() == 0 ? null : builder.toString());
 
     }
 
