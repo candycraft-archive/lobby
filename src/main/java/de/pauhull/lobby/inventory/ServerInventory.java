@@ -18,6 +18,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -88,10 +89,26 @@ public class ServerInventory implements Listener {
                 }
             }
             ItemBuilder builder = new ItemBuilder(material).setDisplayName("§6" + server.getName());
-            if (server.getMap() != null) {
-                builder.setLore("§7§o" + server.getMap(), "§b" + server.getOnlinePlayerCount() + "§7/§b" + server.getMaxPlayerCount(), lore);
+            if (server.getState().equals("INGAME")) {
+                try {
+                    long timePassed = System.currentTimeMillis() - Long.parseLong(server.getMotd());
+                    long minutes = (long) Math.floor((double) timePassed / (double) TimeUnit.MINUTES.toMillis(1));
+                    timePassed %= TimeUnit.MINUTES.toMillis(1);
+                    long seconds = (long) Math.floor((double) timePassed / (double) TimeUnit.SECONDS.toMillis(1));
+                    builder.setLore("§7§o" + server.getMap(), "§bVergangene Zeit: " + String.format("%02d", minutes) + ":" + String.format("%02d", seconds), lore);
+                } catch (IllegalArgumentException e) {
+                    if (server.getMap() != null) {
+                        builder.setLore("§7§o" + server.getMap(), "§b" + server.getOnlinePlayerCount() + "§7/§b" + server.getMaxPlayerCount(), lore);
+                    } else {
+                        builder.setLore("§b" + server.getOnlinePlayerCount() + "§7/§b" + server.getMaxPlayerCount(), lore);
+                    }
+                }
             } else {
-                builder.setLore("§b" + server.getOnlinePlayerCount() + "§7/§b" + server.getMaxPlayerCount(), lore);
+                if (server.getMap() != null) {
+                    builder.setLore("§7§o" + server.getMap(), "§b" + server.getOnlinePlayerCount() + "§7/§b" + server.getMaxPlayerCount(), lore);
+                } else {
+                    builder.setLore("§b" + server.getOnlinePlayerCount() + "§7/§b" + server.getMaxPlayerCount(), lore);
+                }
             }
             int id = Integer.parseInt(server.getName().split("-")[1]);
             builder.setAmount(id);
@@ -115,11 +132,7 @@ public class ServerInventory implements Listener {
         if (stack != null) {
             if (stack.getItemMeta() == null) return;
 
-            String[] players = ChatColor.stripColor(stack.getItemMeta().getLore().get(1)).split("/");
-            int onlinePlayers = Integer.parseInt(players[0]);
-            int maxPlayers = Integer.parseInt(players[1]);
-
-            if (onlinePlayers >= maxPlayers) {
+            if (stack.getType() == Material.REDSTONE_BLOCK) {
                 player.playSound(player.getLocation(), Sound.NOTE_BASS, 1, 1);
                 return;
             }
